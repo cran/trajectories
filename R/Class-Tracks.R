@@ -7,20 +7,20 @@
 # "connections" contains data about the segments between consecutive ST points.
 
 setClass("Track",
-  contains = "STIDF", # Locations, times and attribute data about the points.
-  representation(connections = "data.frame"), 
-  # With attribute data BETWEEN points: speed, direction etc.
-  validity = function(object) {
-	stopifnot(nrow(object@connections) + 1 == nrow(object@data))
-    return(TRUE)
-  }
+	contains = "STIDF", # Locations, times and attribute data about the points.
+	representation(connections = "data.frame"), 
+	# With attribute data BETWEEN points: speed, direction etc.
+	validity = function(object) {
+		stopifnot(nrow(object@connections) + 1 == nrow(object@data))
+		return(TRUE)
+	}
 )
 
 directions_ll = function(cc, ll) {
 	# cc a 2-column matrix with points, [x y] or [long lat]
 	# ll a boolean, indicating longlat (TRUE) or not (FALSE)
 	if (! ll) {
-		dcc = apply(cc, 2, diff)
+		dcc = matrix(apply(cc, 2, diff), ncol = ncol(cc))
 		((atan2(dcc[,1], dcc[,2]) / pi * 180) + 360) %% 360
 	} else {
 		# longlat:
@@ -34,34 +34,39 @@ directions_ll = function(cc, ll) {
 		dlon = lon2 - lon1
 		az = atan2(sin(dlon)*cos(lat2),
 			cos(lat1)*sin(lat2)-sin(lat1)*cos(lat2)*cos(dlon))
-		((az  / pi * 180) + 360) %% 360
+		((az / pi * 180) + 360) %% 360
 	}
 }
 
 TrackStats = function(track) {
+	duration = diff(as.numeric(index(track@time))) # seconds
+	stopifnot(!any(duration == 0))
 	if(class(track@sp)[1] == "SpatialPoints") {
 		cc = coordinates(track@sp)
 		ll = identical(is.projected(track), FALSE)
 		distance = LineLength(cc, ll, FALSE)
 		if (ll) # distance is in km, transform to m:
 			distance = distance * 1000.0
-		duration = diff(as.numeric(index(track@time))) # seconds
-		if (any(duration == 0)) {
-			print(track)
-			stop("zero duration interval(s) detected")
-		}
 		speed = distance / duration # per second
 		direction = directions_ll(cc, ll)
-		df = data.frame(distance = distance, duration = duration, 
-			speed = speed, direction = direction)
-	} else {
-		df = data.frame(matrix(nrow = length(track@sp) - 1, ncol = 0))
-	}
+		data.frame(distance = distance, duration = duration, speed = speed, direction = direction)
+	} else
+		data.frame(matrix(nrow = length(track@sp) - 1, ncol = 0))
 }
 
 # Computes segment lengths.
 
 Track = function(track, df = NULL, fn = TrackStats) {
+	duration = diff(as.numeric(index(track@time))) # seconds
+	if (any(duration == 0)) {
+		#print(track)
+		sel = (c(1, duration) != 0)
+		n = sum(!sel)
+		warning(paste("deselecting", n, "secondary point(s) of zero duration interval(s)"))
+		if (sum(sel) < 2)
+			stop("less than two unique time instances")
+		track = Track(as(track, "STIDF")[sel,])
+	}
 	if (!is.null(fn)) {
 		stats = TrackStats(track)
 		if (is.null(df))
@@ -142,7 +147,6 @@ setClass("TracksCollection",
 #   
 # }
 
-
 TracksSummary = function(tracksCollection) {
 	tc = tracksCollection
 	df = data.frame(n = sapply(tc, function(x) length(x@tracks)))
@@ -151,10 +155,12 @@ TracksSummary = function(tracksCollection) {
 	df$ymin = sapply(tc, function(x) min(x@tracksData$ymin))
 	df$ymax = sapply(tc, function(x) max(x@tracksData$ymax))
 	df$tmin = sapply(tc, function(x) min(x@tracksData$tmin))
-	df$tmin = do.call(c, 
-		lapply(lapply(tc, function(x) x@tracksData$tmin), min))
-	df$tmax = do.call(c, 
-		lapply(lapply(tc, function(x) x@tracksData$tmax), max))
+	df$tmin = as.POSIXct(unlist(lapply(lapply(tc, function(x) x@tracksData$tmin), min)),
+		origin = "1970-01-01", tz=attr(tc[[1]]@tracks[[1]]@time, "tz"))
+		# do.call(c, lapply(lapply(tc, function(x) x@tracksData$tmin), min)) # reported by RH
+	df$tmax = as.POSIXct(unlist(lapply(lapply(tc, function(x) x@tracksData$tmax), max)),
+		origin = "1970-01-01", tz=attr(tc[[1]]@tracks[[1]]@time, "tz"))
+		# do.call(c, lapply(lapply(tc, function(x) x@tracksData$tmax), max)) # reported by RH
 	row.names(df) = names(tracksCollection)
 	df
 }
@@ -164,8 +170,11 @@ TracksCollection = function(tracksCollection, tracksCollectionData = NULL,
 	if (is.null(names(tracksCollection)))
 		names(tracksCollection) = paste("Tracks", 1:length(tracksCollection), 
 		sep = "")
+	ts = TracksSummary(tracksCollection)
 	if (is.null(tracksCollectionData))
-		tracksCollectionData = TracksSummary(tracksCollection)
+		tracksCollectionData = ts
+	else
+		tracksCollectionData = cbind(tracksCollectionData, ts)
 	new("TracksCollection", tracksCollection = tracksCollection, 
 		tracksCollectionData = tracksCollectionData)
 }

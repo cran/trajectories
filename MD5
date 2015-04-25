@@ -1,10 +1,10 @@
-a8700728a952c125cea138501d6973d7 *DESCRIPTION
+5ff1da972b6f134d3f461e4cabdbc504 *DESCRIPTION
 c8e115eb41f51f6f98cb7ab4be978fdd *NAMESPACE
 caf29f6ccef34ff53d1b8a0baf50f0dc *R/Class-Tracks.R
-ba86e69264df06b8a456b92690b21bbe *R/Tracks-methods.R
-65d7b72aa103ae3f5b717183a1efb2bf *R/stplot.R
+4971709e3201ee726e2ffc5c61a26ae9 *R/Tracks-methods.R
+597df85a6a5d8b1bc7dfb7bdeffbee3b *R/stplot.R
 41daa00d0ac0b0add096fb2b08fce285 *README.md
-f50ac0305679175f58259eec404b17dd *build/vignette.rds
+c72641927370c929adebe0172534e0cd *build/vignette.rds
 ffead62f8219b8df7d6b926cfc04f020 *data/A3.rda
 2b35e0e97b7d1cab27c46690f7f4e539 *demo/00Index
 53b6de012682deaf8e46e30f047ab7fe *demo/Tracks.R
@@ -19,7 +19,7 @@ d86ef28223713b9bb2a954302c979101 *man/Track-class.Rd
 7cca86a97c2216a1e77eb87ed1abb6bf *man/stbox.Rd
 c66b162eea2c7846bff003628a847c85 *man/stcube.Rd
 ddbac52ac2d17e42106c61e08e72d466 *tests/tracks.R
-f481ef521b5eb3fd693fe675bdd9c496 *tests/tracks.Rout.save
+1158ab6c9798bdccfb3e725c2be8bdcc *tests/tracks.Rout.save
 23a8ca706b284fdd73be5e1958601d75 *vignettes/ifgi-logo_int.pdf
 a4b3388e94e4d13d3cde23a02f7d41f2 *vignettes/tracks.Rnw
 f5248eb651b79707dfc246874b18bc48 *vignettes/tracks.bib

@@ -41,40 +41,37 @@ directions_ll = function(cc, ll) {
 TrackStats = function(track) {
 	duration = diff(as.numeric(index(track@time))) # seconds
 	stopifnot(!any(duration == 0))
-	if(class(track@sp)[1] == "SpatialPoints") {
+#	if (class(try(cc <- coordinates(track), silent=TRUE)) == "try-error" ||
+#			!is.matrix(cc))
+	if (!is(track@sp, "SpatialPoints"))
+		data.frame(matrix(nrow = length(track@sp) - 1, ncol = 0)) # empty
+	else {
 		cc = coordinates(track@sp)
 		ll = identical(is.projected(track), FALSE)
-		distance = LineLength(cc, ll, FALSE)
+		distance = LineLength(cc, ll, FALSE) 
+				# for sp 1.1-1: use spDists with segments = TRUE
 		if (ll) # distance is in km, transform to m:
 			distance = distance * 1000.0
 		speed = distance / duration # per second
 		direction = directions_ll(cc, ll)
-		data.frame(distance = distance, duration = duration, speed = speed, direction = direction)
-	} else
-		data.frame(matrix(nrow = length(track@sp) - 1, ncol = 0))
+		data.frame(distance = distance, duration = duration, 
+			speed = speed, direction = direction)
+	} 
 }
 
 # Computes segment lengths.
 
-Track = function(track, df = NULL, fn = TrackStats) {
+Track = function(track, df = fn(track), fn = TrackStats) {
+	if (is(track, "STI") && !is(track, "STIDF"))
+		track = STIDF(track@sp, track@time, data.frame(ones = rep(1, length(track))), track@endTime)
 	duration = diff(as.numeric(index(track@time))) # seconds
 	if (any(duration == 0)) {
-		#print(track)
 		sel = (c(1, duration) != 0)
 		n = sum(!sel)
 		warning(paste("deselecting", n, "secondary point(s) of zero duration interval(s)"))
 		if (sum(sel) < 2)
 			stop("less than two unique time instances")
 		track = Track(as(track, "STIDF")[sel,])
-	}
-	if (!is.null(fn)) {
-		stats = TrackStats(track)
-		if (is.null(df))
-			df = stats
-		else {
-			stopifnot(nrow(df) == nrow(stats))
-			df = cbind(df, stats)
-		}
 	}
 	new("Track", track, connections = df)
 }
@@ -98,16 +95,16 @@ TrackSummary = function(track) {
 	bb = bbox(track@sp)
 	conn = track@connections
 	data.frame(
-	xmin = bb[1,1],
-	xmax = bb[1,2],
-	ymin = bb[2,1],
-	ymax = bb[2,2],
-	tmin = min(ix),
-	tmax = max(ix),
-	n = length(track@sp),
-	distance = sum(conn$distance),
-	medspeed = quantile(conn$speed, 0.5)
-	# TODO Compute some mean direction?
+		xmin = bb[1,1],
+		xmax = bb[1,2],
+		ymin = bb[2,1],
+		ymax = bb[2,2],
+		tmin = min(ix),
+		tmax = max(ix),
+		n = length(track@sp),
+		distance = sum(conn$distance),
+		medspeed = quantile(conn$speed, 0.5)
+		# TODO Compute some mean direction?
 	)
 }
 
@@ -154,7 +151,6 @@ TracksSummary = function(tracksCollection) {
 	df$xmax = sapply(tc, function(x) max(x@tracksData$xmax))
 	df$ymin = sapply(tc, function(x) min(x@tracksData$ymin))
 	df$ymax = sapply(tc, function(x) max(x@tracksData$ymax))
-	df$tmin = sapply(tc, function(x) min(x@tracksData$tmin))
 	df$tmin = as.POSIXct(unlist(lapply(lapply(tc, function(x) x@tracksData$tmin), min)),
 		origin = "1970-01-01", tz=attr(tc[[1]]@tracks[[1]]@time, "tz"))
 		# do.call(c, lapply(lapply(tc, function(x) x@tracksData$tmin), min)) # reported by RH

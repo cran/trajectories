@@ -2,7 +2,7 @@
 ### Encoding: UTF-8
 
 ###################################################
-### code chunk number 1: tracks.Rnw:27-31
+### code chunk number 1: tracks.Rnw:24-28
 ###################################################
 # Wrap R commands. Use together with Sweave option "keep.source=false".
 # options(width = 60)
@@ -11,7 +11,7 @@ library("rgl")
 
 
 ###################################################
-### code chunk number 2: tracks.Rnw:46-49
+### code chunk number 2: tracks.Rnw:43-46
 ###################################################
 library("spacetime")
 library("trajectories")
@@ -19,32 +19,32 @@ example("Track")
 
 
 ###################################################
-### code chunk number 3: tracks.Rnw:64-65
+### code chunk number 3: tracks.Rnw:61-62
 ###################################################
 Track(stidf)
 
 
 ###################################################
-### code chunk number 4: tracks.Rnw:76-77
+### code chunk number 4: tracks.Rnw:73-74
 ###################################################
 Tracks(list(A1 = A1, A2 = A2))
 
 
 ###################################################
-### code chunk number 5: tracks.Rnw:88-89
+### code chunk number 5: tracks.Rnw:85-86
 ###################################################
 TracksCollection(list(A = A, B = B))
 
 
 ###################################################
-### code chunk number 6: tracks.Rnw:112-114
+### code chunk number 6: tracks.Rnw:109-111
 ###################################################
 dim(Tr)
 summary(Tr)
 
 
 ###################################################
-### code chunk number 7: tracks.Rnw:119-123
+### code chunk number 7: tracks.Rnw:116-120
 ###################################################
 proj4string(B)
 coordinates(A1)
@@ -53,91 +53,91 @@ bbox(A)
 
 
 ###################################################
-### code chunk number 8: tracks.Rnw:128-129
+### code chunk number 8: tracks.Rnw:125-126
 ###################################################
 bbox(Tr)
 
 
 ###################################################
-### code chunk number 9: tracks.Rnw:134-135
+### code chunk number 9: tracks.Rnw:131-132
 ###################################################
 stbox(Tr)
 
 
 ###################################################
-### code chunk number 10: tracks.Rnw:146-148
+### code chunk number 10: tracks.Rnw:143-145
 ###################################################
 class(Tr[1:2])
 dim(Tr[1:2])
 
 
 ###################################################
-### code chunk number 11: tracks.Rnw:152-154
+### code chunk number 11: tracks.Rnw:149-151
 ###################################################
 class(Tr[2])
 dim(Tr[2])
 
 
 ###################################################
-### code chunk number 12: tracks.Rnw:158-160
+### code chunk number 12: tracks.Rnw:155-157
 ###################################################
 class(Tr[2][1])
 dim(Tr[2][1])
 
 
 ###################################################
-### code chunk number 13: tracks.Rnw:165-167
+### code chunk number 13: tracks.Rnw:162-164
 ###################################################
 class(Tr[list(1:2, 2)])
 dim(Tr[list(1:2, 2)])
 
 
 ###################################################
-### code chunk number 14: tracks.Rnw:171-172 (eval = FALSE)
+### code chunk number 14: tracks.Rnw:168-169 (eval = FALSE)
 ###################################################
 ## Tr[Muenster]
 
 
 ###################################################
-### code chunk number 15: tracks.Rnw:175-177
+### code chunk number 15: tracks.Rnw:172-174
 ###################################################
 class(Tr[["co2"]])
 length(Tr[["co2"]])
 
 
 ###################################################
-### code chunk number 16: tracks.Rnw:180-182
+### code chunk number 16: tracks.Rnw:177-179
 ###################################################
 class(Tr$co2)
 length(Tr$co2)
 
 
 ###################################################
-### code chunk number 17: tracks.Rnw:185-186
+### code chunk number 17: tracks.Rnw:182-183
 ###################################################
 Tr[["distance"]] = Tr[["distance"]] * 1000
 
 
 ###################################################
-### code chunk number 18: tracks.Rnw:189-190
+### code chunk number 18: tracks.Rnw:186-187
 ###################################################
 Tr$distance = Tr$distance * 1000
 
 
 ###################################################
-### code chunk number 19: tracks.Rnw:229-230
+### code chunk number 19: tracks.Rnw:226-227
 ###################################################
 plot(Tr, col = 2, axes = TRUE)
 
 
 ###################################################
-### code chunk number 20: tracks.Rnw:238-239
+### code chunk number 20: tracks.Rnw:235-236
 ###################################################
 stplot(Tr, attr = "co2", arrows = TRUE, lwd = 3, by = "IDs")
 
 
 ###################################################
-### code chunk number 21: tracks.Rnw:251-265 (eval = FALSE)
+### code chunk number 21: tracks.Rnw:248-262 (eval = FALSE)
 ###################################################
 ## # Generalise a track into 5 minute intervals. Use max() as the
 ## # aggregation function.
@@ -156,14 +156,14 @@ stplot(Tr, attr = "co2", arrows = TRUE, lwd = 3, by = "IDs")
 
 
 ###################################################
-### code chunk number 22: tracks.Rnw:274-276 (eval = FALSE)
+### code chunk number 22: tracks.Rnw:271-273 (eval = FALSE)
 ###################################################
 ## demo("Track")
 ## demo("stcube")
 
 
 ###################################################
-### code chunk number 23: tracks.Rnw:281-314
+### code chunk number 23: tracks.Rnw:278-311
 ###################################################
 # Import enviroCar track.
 importEnviroCar = function(trackID, url = "https://envirocar.org/api/stable/tracks/") {
@@ -201,14 +201,14 @@ importEnviroCar = function(trackID, url = "https://envirocar.org/api/stable/trac
 
 
 ###################################################
-### code chunk number 24: tracks.Rnw:318-320 (eval = FALSE)
+### code chunk number 24: tracks.Rnw:315-317 (eval = FALSE)
 ###################################################
 ## A3 = importEnviroCar("528cf1a3e4b0a727145df093")
 ## stcube(A3, showMap = TRUE, col = "red")
 
 
 ###################################################
-### code chunk number 25: tracks.Rnw:323-325 (eval = FALSE)
+### code chunk number 25: tracks.Rnw:320-322 (eval = FALSE)
 ###################################################
 ## data(A3)
 ## stcube(A3, showMap = TRUE, col = "red")

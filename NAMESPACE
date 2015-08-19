@@ -2,35 +2,55 @@ import(methods)
 import(sp)
 import(spacetime)
 import(lattice)
+importFrom(stats, approx, as.formula, na.omit, quantile, rnorm)
 # importFrom(stats, aggregate, na.omit, time, start, end)
-importFrom(utils, stack, unstack)
-# importFrom(rgl, plot3d, lines3d, surface3d)
-# importFrom(OpenStreetMap, openmap, openproj)
+importFrom(utils, head, tail, stack, unstack)
+importFrom(graphics, arrows, box, lines, points, segments)
+importFrom(grDevices, rainbow)
 
 exportClasses(
-	Track, Tracks, TracksCollection, segments, difftrack
+	Track,
+	Tracks,
+	TracksCollection,
+	segments,
+	difftrack
 )
 
 export(
-	Track, Tracks, TracksCollection, segPanel, tracksPanel
+	Track, 
+	Tracks,
+	TracksCollection,
+	TrackStats,
+	TrackSummary,
+	TracksSummary,
+	segPanel,
+	tracksPanel,
+	approxTrack,
+	approxTracks,
+	approxTracksCollection
 )
 
 exportMethods(
+	compare,
+	dists,
+	downsample,
+	frechetDist,
 	generalize,
+	plot,
 	stbox,
-	stcube,
-  compare,
-  downsample,
-  frechetDist,
-  dists
+	stcube
 )
 
 S3method(dim, Track)
 S3method(dim, Tracks)
 S3method(dim, TracksCollection)
+
 S3method(print, summary.Track)
 S3method(print, summary.Tracks)
 S3method(print, summary.TracksCollection)
+
 S3method(stack, TracksCollection)
+
 S3method(unstack, TracksCollection)
+
 S3method(c, Tracks)

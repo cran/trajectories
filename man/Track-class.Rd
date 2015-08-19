@@ -7,6 +7,7 @@
 \alias{Track}
 \alias{Tracks}
 \alias{TracksCollection}
+\alias{TrackStats}
 \alias{TrackSummary}
 \alias{TracksSummary}
 \alias{[,Track-method} 
@@ -34,9 +35,14 @@
 \alias{aggregate,Tracks-method}
 \alias{aggregate,TracksCollection-method}
 \alias{plot,TracksCollection,ANY-method}
+\alias{plot,Track,missing-method}
+\alias{plot,Tracks,ANY-method}
 \alias{stplot,TracksCollection-method}
 \alias{segPanel}
 \alias{tracksPanel}
+\alias{approxTrack}
+\alias{approxTracks}
+\alias{approxTracksCollection}
 
 \title{Classes "Track", "Tracks", and "TracksCollection"}
 \description{ Classes for representing sets of trajectory data, 
@@ -103,11 +109,12 @@ different IDs.
 }
 
 \usage{
-  Track(track, df = NULL, fn = TrackStats)
+  Track(track, df = fn(track), fn = TrackStats)
   Tracks(tracks, tracksData = data.frame(row.names=names(tracks)), 
   		fn = TrackSummary)
   TracksCollection(tracksCollection, tracksCollectionData,
   		fn = TracksSummary)
+  TrackStats(track)
   TrackSummary(track)
   TracksSummary(tracksCollection)
   \S4method{[}{Track}(x, i, j, ..., drop = TRUE)
@@ -141,7 +148,20 @@ different IDs.
 \value{Functions \code{Track}, \code{Tracks} and
 \code{TracksCollection} are constructor functions that take the
 slots as arguments, check object validity, and compute summary
-statistics on the track and tracks sets.}
+statistics on the track and tracks sets.
+
+\code{TrackStats} returns a \code{data.frame} with for each track
+segment the distance, duration, speed, and direction. In case data are
+geographical coordinates (long/lat), distance is in m, and direction
+is initial bearing.
+
+\code{TrackSummary} reports for each track xmin, xmax, ymin, ymax,
+tmin, tmax, (number of points) n, (total) distance, and medspeed
+(median speed).
+
+\code{TracksSummary} reports for each Tracks of a TracksCollection
+(number of tracks) n, xmin, xmax, ymin, ymax, tmin, tmin, tmax.
+}
 
 \author{ Edzer Pebesma, \email{edzer.pebesma@uni-muenster.de} }
 \references{ http://www.jstatsoft.org/v51/i07/ }
@@ -158,10 +178,10 @@ t0 = as.POSIXct(as.Date("2013-09-30",tz="CET"))
 x = c(7,6,5,5,4,3,3)
 y = c(7,7,6,5,5,6,7)
 n = length(x)
+set.seed(131)
 t = t0 + cumsum(runif(n) * 60)
 require(rgdal)
-crs = CRS("+proj=longlat +ellps=WGS84")
-#crs = CRS(as.character(NA))
+crs = CRS("+proj=longlat +ellps=WGS84") # longlat
 stidf = STIDF(SpatialPoints(cbind(x,y),crs), t, data.frame(co2 = rnorm(n)))
 A1 = Track(stidf)
 # person A, track 2:
@@ -207,6 +227,45 @@ as(Tr, "segments")[1:10,]   # track segments as records
 Tr[["distance"]] = Tr[["distance"]] * 1000
 Tr$distance = Tr$distance / 1000
 Tr$distance
+# work with custum TrackStats function:
+MyStats = function(track) {
+	df = apply(coordinates(track@sp), 2, diff) # requires sp
+	data.frame(distance = apply(df, 1, function(x) sqrt(sum(x^2))))
+}
+crs = CRS(as.character(NA))
+stidf = STIDF(SpatialPoints(cbind(x,y),crs), t, data.frame(co2 = rnorm(n)))
+B2 = Track(stidf) # no longer longlat;
+B3 = Track(stidf, fn = MyStats)
+all.equal(B3$distance, B2$distance)
+
+# approxTrack:
+opar = par()
+par(mfrow = c(1, 2))
+plot(B2, ylim = c(.5, 6))
+plot(B2, pch = 16, add = TRUE)
+title("irregular time steps")
+i = index(B2)
+B3 = approxTrack(B2, seq(min(i), max(i), length.out = 50))
+plot(B3, col = 'red', type = 'p', add = TRUE)
+B4 = approxTrack(B2, seq(min(i), max(i), length.out = 50), FUN = spline)
+plot(B4, col = 'blue', type = 'b', add = TRUE)
+# regular time steps:
+t = max(t) + (1:n) * 60 # regular
+B2 = Track(STIDF(SpatialPoints(cbind(x,y),crs), t, data.frame(co2 = rnorm(n))))
+plot(B2, ylim = c(.5, 6))
+plot(B2, pch = 16, add = TRUE)
+title("constant time steps")
+i = index(B2)
+B3 = approxTrack(B2)
+plot(B3, type = 'p', col = 'red', add = TRUE)
+B4 = approxTrack(B2, FUN = spline)
+plot(B4, type = 'p', col = 'blue', add = TRUE)
+par(opar)
+smth = function(x,y,xout,...) predict(smooth.spline(as.numeric(x), y), as.numeric(xout))
+data(storms)
+plot(storms, type = 'p')
+storms.smooth = approxTracksCollection(storms, FUN = smth, n = 200)
+plot(storms.smooth, add = TRUE, col = 'red')
 }
 
 \keyword{classes}

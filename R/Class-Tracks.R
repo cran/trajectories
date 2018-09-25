@@ -86,6 +86,12 @@ setClass("Tracks",
 		stopifnot(length(object@tracks) > 0)
 		stopifnot(!is.null(names(object@tracks)))
 		stopifnot(identicalCRS(object@tracks))
+		if (length(object@tracks) > 1) { # verify non-overlap of time intervals:
+			TR = t(sapply(object@tracks, function(x) range(index(x)))) # time range matrix
+			overlap = which(head(TR[,2], -1) > tail(TR[,1], -1))
+			if (length(overlap) > 0)
+				warning(paste("tracks with overlapping time intervals:",paste(overlap, collapse=", ")))
+		}
 		return(TRUE)
 	}
 )
@@ -112,6 +118,8 @@ TrackSummary = function(track) {
 
 Tracks = function(tracks, 
 		tracksData = data.frame(row.names=names(tracks)), fn = TrackSummary) {
+
+	stopifnot(is.list(tracks))
 	if (is.null(names(tracks)) && length(tracks) > 0)
 		names(tracks) = paste("Track", 1:length(tracks), sep = "")
 	new("Tracks", tracks = tracks, 
@@ -163,6 +171,8 @@ TracksSummary = function(tracksCollection) {
 
 TracksCollection = function(tracksCollection, tracksCollectionData = NULL,
 	fn = TracksSummary) {
+
+	stopifnot(is.list(tracksCollection))
 	if (is.null(names(tracksCollection)))
 		names(tracksCollection) = paste("Tracks", 1:length(tracksCollection), 
 		sep = "")

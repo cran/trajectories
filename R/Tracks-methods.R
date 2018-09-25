@@ -60,7 +60,7 @@ setAs("TracksCollection", "data.frame",
 # Coerce to Line, Lines, SpatialLines and SpatialLinesDataFrame. 
 
 setAs("Track", "Line", 
-	function(from) Line(coordinates(from@sp))
+      function(from) Line(coordinates(from))
 )
 
 setAs("Track", "Lines",
@@ -158,8 +158,7 @@ setAs("Track", "Spatial",
 
 setAs("Tracks", "Spatial",
 	function(from) {
-		ret = do.call(rbind, lapply(from@tracks, 
-			function(x) as(x, "Spatial")))
+		ret = do.call(rbind, lapply(from@tracks, function(x) as(x, "Spatial")))
 		ret$Track = rep(names(from@tracks), times = lapply(from@tracks, length))
 		ret
 	}
@@ -180,7 +179,9 @@ setAs("TracksCollection", "SpatialPointsDataFrame", function(from) as(from, "Spa
 # Provide coordinates methods.
 
 setMethod("coordinates", "Track",
-	function(obj) coordinates(obj@sp)
+          function(obj) { if(class(obj@sp)=="SpatialPoints") {return(as.data.frame(obj@sp))}
+            if (class(obj@sp)=="SpatialLines") {do.call(rbind,lapply(coordinates(obj@sp), as.data.frame))}
+          }
 )
 
 setMethod("coordinates", "Tracks",
@@ -207,32 +208,27 @@ setMethod("proj4string", signature(obj = "TracksCollection"),
 
 # Provide plot methods. TODO Make more generic.
 
-plot.TracksCollection <- function(x, y, ..., type = 'l', xlim = stbox(x)[,1],
+plot.TracksCollection <- function(x, y, ..., xlim = stbox(x)[,1],
 		ylim = stbox(x)[,2], col = 1, lwd = 1, lty =
-		1, axes = TRUE, Arrows = FALSE, Segments = FALSE, add = FALSE) {
+		1, axes = TRUE, Arrows = FALSE, Segments = FALSE, add = FALSE,
+		length = 0.25, angle = 30, code = 2) {
+
 	sp = x@tracksCollection[[1]]@tracks[[1]]@sp
-	# Submitting arrows() and lines() formals to plot prompts warnings, 
-	# so they are absorbed here by localPlot() formals.
-	localPlot <- function (..., length, angle, code, xpd, lend, ljoin, lmitre)
-		plot (...)
-	if (! add)
-		localPlot(as(sp, "Spatial"), xlim = xlim, ylim = ylim, axes = axes, ...)
-	if (axes == FALSE)
-		box()
 	if (Arrows || Segments) {
+		if (! add)
+			plot(sp, xlim = xlim, ylim = ylim, axes = axes, ...)
+		if (axes == FALSE)
+			box()
 		df = as(x, "segments")
 		args = list(x0 = df$x0, y0 = df$y0, x1 = df$x1, y1 = df$y1, 
-			col = col, lwd = lwd, lty = lty, ...)
+			col = col, lwd = lwd, lty = lty) 
 		if (Arrows)
-			do.call(arrows, args)
+			do.call(arrows, append(args, list(length = length, angle = angle, code = code)))
 		else
 			do.call(segments, args)
-	} else {
-		linesTrack = function(x, y, ...) lines(as(x@sp, "SpatialLines"), ...)
-		linesTracks = function(x, y, ...) mapply(linesTrack, x@tracks, ...)
-		invisible(mapply(linesTracks, 
-			x@tracksCollection, col = col, lwd = lwd, lty = lty, type = type, ...))
-	}
+	} else
+		plot(as(x, "SpatialLines"), xlim = xlim, ylim = ylim, axes = axes, 
+			col = col, lwd = lwd, lty = lty, add = add, ...)
 }
 setMethod("plot", "TracksCollection", plot.TracksCollection)
 
@@ -381,6 +377,10 @@ summary.Tracks = function(object, ...) {
 	class(obj) = "summary.Tracks"
 	obj
 }
+
+setMethod("show", "Track", function(object) print.Track(object))
+setMethod("show", "Tracks", function(object) print.Tracks(object))
+setMethod("show", "TracksCollection", function(object) print.TracksCollection(object))
 
 setMethod("summary", "Tracks", summary.Tracks)
 
@@ -656,8 +656,20 @@ stack.TracksCollection = function (x, select, ...) {
 	TracksCollection(do.call(c, l))
 }
 
+c.Track = function(...) {
+	lst = list(...)
+	# check time is in sequence:
+	i = do.call(c, lapply(lst, function(x) index(x)))
+	if (is.unsorted(i))
+		stop("cannot concatenate overlapping or unsorted Track objects")
+	Track(do.call(rbind, lapply(lst, function(x) as(x, "STIDF"))))
+}
+
 c.Tracks = function(...)
 	Tracks(do.call(c, lapply(list(...), function(x) x@tracks)))
+
+c.TracksCollection = function(...)
+	TracksCollection(do.call(c, lapply(list(...), function(x) x@tracksCollection)))
 
 unstack.TracksCollection = function(x, form, ...) {
 	TracksCollection(lapply(split(x@tracksCollection, form), 
@@ -675,10 +687,56 @@ approxTrack = function(track, when, ..., n = 50, by, FUN = stats::approx, warn.i
 	} else if (warn.if.outside &&
 		(min(when) < min(index(track)) || max(when) > max(index(track))))
 			warning("approxTrack: approximating outside data range")
-	p = apply(coordinates(track), 2, function(y) FUN(x, y, xout = when, n = n, ...)$y)
+	cc = coordinates(track)
+	p = apply(cc, 2, function(y) FUN(x, y, xout = when, n = n, ...)$y)
 	d = data.frame(lapply(track@data, function(y) FUN(x, y, xout = when, n = n, ... )$y))
-	Track(STIDF(SpatialPoints(p, CRS(proj4string(track))), when, d))
+	if (!is.matrix(p)) { # single point: return STIDF
+		p = matrix(p, ncol = ncol(cc))
+		STIDF(SpatialPoints(p, CRS(proj4string(track))), when, d)
+	} else
+		Track(STIDF(SpatialPoints(p, CRS(proj4string(track))), when, d))
 }
 approxTracks = function(tr, ...) Tracks(lapply(tr@tracks, function(x) approxTrack(x,...)))
 approxTracksCollection = function(tc, ...)
 	TracksCollection(lapply(tc@tracksCollection, function(x) approxTracks(x,...)))
+
+setMethod("spTransform", c("Track", "CRS"),
+	function(x, CRSobj, ...)
+		#Track(spTransform(as(x, "STIDF"), CRSobj, ...), df = x@connections)
+		Track(spTransform(as(x, "STIDF"), CRSobj, ...))
+)
+setMethod("spTransform", c("Tracks", "CRS"),
+	function(x, CRSobj, ...)
+		Tracks(lapply(x@tracks, function(y) spTransform(y, CRSobj, ...)))
+)
+setMethod("spTransform", c("TracksCollection", "CRS"),
+	function(x, CRSobj, ...)
+		TracksCollection(lapply(x@tracksCollection, function(y) spTransform(y, CRSobj, ...)))
+)
+
+## Default S3 method:
+#     cut(x, breaks, labels = NULL,
+#         include.lowest = FALSE, right = TRUE, dig.lab = 3,
+#         ordered_result = FALSE, ...)
+ 
+cut.Track = function(x, breaks, ..., include.lowest = TRUE, touch = TRUE) {
+	i = index(x)
+	f = cut(i, breaks, ..., include.lowest = include.lowest)
+	d = dim(x) # nr of pts
+	x = as(x, "STIDF")
+	if (! touch)
+		spl = lapply(split(x = seq_len(d), f), function(ind) x[ind, , drop = FALSE])
+	else
+		spl = lapply(split(x = seq_len(d), f), function(ind) {
+				ti = tail(ind, 1)
+				if (ti < d)
+					ind = c(ind,ti+1)
+				x[ind, , drop = FALSE]
+			})
+	Tracks(lapply(spl[sapply(spl, length) > 1], Track))
+}
+
+cut.Tracks = function(x, breaks, ...) do.call(c, lapply(x@tracks, cut, breaks = breaks, ...))
+
+cut.TracksCollection = function(x, breaks, ...) 	
+	TracksCollection(lapply(x@tracksCollection, cut, breaks = breaks, ...))

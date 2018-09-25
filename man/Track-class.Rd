@@ -13,6 +13,9 @@
 \alias{[,Track-method} 
 \alias{[,Tracks-method} 
 \alias{[,TracksCollection-method}
+\alias{[,Track,ANY,ANY,ANY-method} 
+\alias{[,Tracks,ANY,ANY,ANY-method} 
+\alias{[,TracksCollection,ANY,ANY,ANY-method}
 \alias{[[,Track,ANY,missing-method}
 \alias{[[,Tracks,ANY,missing-method}
 \alias{[[,TracksCollection,ANY,missing-method}
@@ -38,6 +41,9 @@
 \alias{plot,Track,missing-method}
 \alias{plot,Tracks,ANY-method}
 \alias{stplot,TracksCollection-method}
+\alias{spTransform,Track,CRS-method}
+\alias{spTransform,Tracks,CRS-method}
+\alias{spTransform,TracksCollection,CRS-method}
 \alias{segPanel}
 \alias{tracksPanel}
 \alias{approxTrack}

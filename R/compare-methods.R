@@ -57,10 +57,10 @@ dists.tracks <- function(tr1, tr2, f = mean, ...) {
   for (i in 1:cols) {
     for (j in 1:rows) {
       if (identical(f, frechetDist)) {
-        dists[i,j] <- f(tr1[i], tr2[j])
+        dists[j,i] <- f(tr1[i], tr2[j])
       } else try({ ## try in case compare gives an error because tracks don't overlap in time
         difftrack <- compare(tr1[i], tr2[j])
-        dists[i,j] <- f(c(difftrack@conns1@data$dists, difftrack@conns2@data$dists), ...)
+        dists[j,i] <- f(c(difftrack@conns1@data$dists, difftrack@conns2@data$dists), ...)
       })
     }
   }
@@ -77,8 +77,10 @@ findPoints <- function(tr1, tr2, ivs) {
   for (i in 1:nrow(tr1)) {
     if (!ivs[i] == 0 && !ivs[i] == nrow(tr2)) {
       iv <- ivs[i]
-      tdiff1 <- tr1$time[i] - tr2$time[iv] # diff between timestamp and start of the interval it falls in
-      tdiff2 <- tr2$time[iv+1] - tr2$time[iv] # diff between timestamps (calculated here because it often varies)
+      # tdiff1 <- tr1$time[i] - tr2$time[iv] # diff between timestamp and start of the interval it falls in
+      tdiff1 <- difftime(tr1$time[i], tr2$time[iv])
+      # tdiff2 <- tr2$time[iv+1] - tr2$time[iv] # diff between timestamps (calculated here because it often varies)
+	    tdiff2 <-  difftime(tr2$time[iv+1], tr2$time[iv], units = units(tdiff1))
       ratio <- as.numeric(tdiff1)/as.numeric(tdiff2) 
       x1 <- tr2[iv,1] # segment coordinates
       y1 <- tr2[iv,2]
@@ -159,15 +161,15 @@ downsample.track <- function(track1, track2) {
     xy1 <- cbind(head (xy, n), tail (xy, n))    
     d2.long <- head(d1, n) + tail(d1, n)
     xy.new <- list()
-    for(i in 1:n) xy.new[[i]] <- rbind(head(xy, n)[i,], tail(xy, n)[i,])
-    d2.short <- sapply (xy.new, function(x) spDists(x, longlat=TRUE)[1,2])
+    for(i in 1:n) {xy.new[[i]] <- rbind(head(xy, n)[i,], tail(xy, n)[i,])}
+    d2.short <- sapply (xy.new, function(x) spDists(as.matrix(x), longlat=TRUE)[1,2])
     remove <- which.min(d2.long - d2.short) + 1
     xy <- xy[- remove,]
     time <- time[- remove]
     stidf <- STIDF(SpatialPoints (xy, crs), time, data.frame(extraDat=rnorm(n)))
-    tr  <- Track (stidf)
+    track1  <- Track (stidf)
   }
-  tr
+  track1
 }
 
 setMethod("downsample", signature("Track"), downsample.track)

@@ -187,7 +187,7 @@ n = length(x)
 set.seed(131)
 t = t0 + cumsum(runif(n) * 60)
 require(rgdal)
-crs = CRS("+proj=longlat +ellps=WGS84") # longlat
+crs = CRS("+proj=longlat +datum=WGS84") # longlat
 stidf = STIDF(SpatialPoints(cbind(x,y),crs), t, data.frame(co2 = rnorm(n)))
 A1 = Track(stidf)
 # person A, track 2:
@@ -266,7 +266,7 @@ B3 = approxTrack(B2)
 plot(B3, type = 'p', col = 'red', add = TRUE)
 B4 = approxTrack(B2, FUN = spline)
 plot(B4, type = 'p', col = 'blue', add = TRUE)
-par(opar)
+# par(opar) # good to do, but would generate warnings
 smth = function(x,y,xout,...) predict(smooth.spline(as.numeric(x), y), as.numeric(xout))
 data(storms)
 plot(storms, type = 'p')

@@ -34,7 +34,7 @@ Mohammad Mehdi Moradi <moradi@uji.es>
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\link[trajectories]{as.Track.arrow}, \link[spatstat]{idw}}
+\link{as.Track.arrow}, \link[spatstat]{idw}}
 \examples{
 X <- list()
 for(i in 1:10){
@@ -43,7 +43,3 @@ for(i in 1:10){
 }
 Track.idw(X,timestamp="180 secs")
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

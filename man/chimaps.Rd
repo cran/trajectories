@@ -31,7 +31,7 @@ Mohammad Mehdi Moradi <moradi@uji.es>
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\link[trajectories]{density.list}, \link[spatstat]{density.ppp}
+\link{density.list}, \link[spatstat]{density.ppp}
 }
 \examples{
 X <- list()
@@ -41,7 +41,3 @@ for(i in 1:10){
 }
 chimaps(X, timestamp = "180 secs",rank = 2)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

@@ -44,12 +44,8 @@ n = length(x)
 set.seed(131)
 t = t0 + cumsum(runif(n) * 60)
 require(rgdal)
-crs = CRS("+proj=longlat +ellps=WGS84") # longlat
+crs = CRS("+proj=longlat +datum=WGS84") # longlat
 stidf = STIDF(SpatialPoints(cbind(x,y),crs), t, data.frame(co2 = rnorm(n)))
 A1 = Track(stidf)
 tsqTracks(A1,timestamp = "1 sec")
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

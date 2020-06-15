@@ -37,8 +37,8 @@ Mohammad Mehdi Moradi <moradi@uji.es>}
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\link[trajectories]{rTrack}, \link[trajectories]{as.Track},
- \link[base]{as.POSIXct}, \link[trajectories]{compare}
+\link{rTrack}, \link{as.Track},
+ \link{as.POSIXct}, \link{compare}
 }
 \examples{
 library(sp)
@@ -51,13 +51,9 @@ n = length(x)
 set.seed(131)
 t = t0 + cumsum(runif(n) * 60)
 require(rgdal)
-crs = CRS("+proj=longlat +ellps=WGS84") # longlat
+crs = CRS("+proj=longlat +datum=WGS84") # longlat
 stidf = STIDF(SpatialPoints(cbind(x,y),crs), t, data.frame(co2 = rnorm(n)))
 A1 = Track(stidf)
 reTrack(A1,timestamp = "1 sec")
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

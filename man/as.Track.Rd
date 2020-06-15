@@ -35,7 +35,7 @@ Mohammad Mehdi Moradi <moradi@uji.es>
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\link[trajectories]{Track}, \link[base]{as.POSIXct}
+\link{Track}, \link{as.POSIXct}
 }
 \examples{
 x <- runif(10,0,1)
@@ -44,7 +44,3 @@ date <- seq(as.POSIXct("2015-1-1 0:00"), as.POSIXct("2015-1-1 9:00"), by = "hour
 Z <- as.Track(x,y,date)
 plot(Z)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

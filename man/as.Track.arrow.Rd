@@ -30,7 +30,7 @@ Mohammad Mehdi Moradi <moradi@uji.es>
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\link[trajectories]{rTrack}, \link[trajectories]{as.Track.ppp}
+\link{rTrack}, \link{as.Track.ppp}
 }
 \examples{
 X <- list()
@@ -40,7 +40,3 @@ for(i in 1:10){
 }
 Y <- as.Track.arrow(X,timestamp="120 secs")
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

@@ -1,5 +1,5 @@
 Package: trajectories
-Version: 0.2-3
+Version: 0.2-4
 Title: Classes and Methods for Trajectory Data
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de", comment = c(ORCID = "0000-0001-8049-7069")),
 	person("Benedikt", "Klus", role = "aut"),
@@ -22,12 +22,12 @@ Collate: Class-Tracks.R Tracks-methods.R generalize.R stcube.R stplot.R
         difftrack.R compare-methods.R rtracks.R Trackstat.R
 RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2021-03-16 10:50:58 UTC; edzer
 Author: Edzer Pebesma [aut, cre] (<https://orcid.org/0000-0001-8049-7069>),
   Benedikt Klus [aut],
   Benedikt Graeler [ctb],
   Nikolai Gorte [ctb],
   Mehdi Moradi [aut]
 Maintainer: Edzer Pebesma <edzer.pebesma@uni-muenster.de>
+Packaged: 2022-09-29 07:58:23 UTC; edzer
 Repository: CRAN
-Date/Publication: 2021-03-16 12:20:02 UTC
+Date/Publication: 2022-09-29 11:00:08 UTC

@@ -1,5 +1,5 @@
 Package: trajectories
-Version: 0.2-5
+Version: 0.2-6
 Title: Classes and Methods for Trajectory Data
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de", comment = c(ORCID = "0000-0001-8049-7069")),
 	person("Benedikt", "Klus", role = "aut"),
@@ -28,6 +28,6 @@ Author: Edzer Pebesma [aut, cre] (<https://orcid.org/0000-0001-8049-7069>),
   Nikolai Gorte [ctb],
   Mehdi Moradi [aut]
 Maintainer: Edzer Pebesma <edzer.pebesma@uni-muenster.de>
-Packaged: 2022-11-20 11:45:38 UTC; edzer
+Packaged: 2022-12-21 18:00:15 UTC; edzer
 Repository: CRAN
-Date/Publication: 2022-11-20 22:50:02 UTC
+Date/Publication: 2022-12-22 11:00:02 UTC

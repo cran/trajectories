@@ -4,18 +4,17 @@
 ### code chunk number 1: preliminaries
 ###################################################
 options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
-library("MASS")
 
 
 ###################################################
-### code chunk number 2: article.Rnw:108-110
+### code chunk number 2: article.Rnw:107-109
 ###################################################
  # install.packages("taxidata", 
  #  repos = "http://pebesma.staff.ifgi.de",type = "source") 
 
 
 ###################################################
-### code chunk number 3: article.Rnw:118-131
+### code chunk number 3: article.Rnw:117-130
 ###################################################
 library("trajectories")
 # library("taxidata")
@@ -33,13 +32,13 @@ library("trajectories")
 
 
 ###################################################
-### code chunk number 4: article.Rnw:169-170
+### code chunk number 4: article.Rnw:168-169
 ###################################################
 library("trajectories")
 
 
 ###################################################
-### code chunk number 5: article.Rnw:175-188
+### code chunk number 5: article.Rnw:174-187
 ###################################################
 set.seed(10)
 library("spacetime")
@@ -57,13 +56,13 @@ A1
 
 
 ###################################################
-### code chunk number 6: article.Rnw:192-193
+### code chunk number 6: article.Rnw:191-192
 ###################################################
 plot(A1)
 
 
 ###################################################
-### code chunk number 7: article.Rnw:203-209
+### code chunk number 7: article.Rnw:202-208
 ###################################################
 x <- runif(10,0,1)
 y <- runif(10,0,1)
@@ -74,7 +73,7 @@ as.Track(x,y,date,covariate = records)
 
 
 ###################################################
-### code chunk number 8: article.Rnw:215-225
+### code chunk number 8: article.Rnw:214-224
 ###################################################
 x = c(7,6,6,7,7)
 y = c(6,5,4,4,3)
@@ -89,7 +88,7 @@ A
 
 
 ###################################################
-### code chunk number 9: article.Rnw:231-251
+### code chunk number 9: article.Rnw:230-250
 ###################################################
 # person B, track 1:
 x = c(2,2,1,1,2,3)
@@ -114,7 +113,7 @@ Tr
 
 
 ###################################################
-### code chunk number 10: article.Rnw:300-304
+### code chunk number 10: article.Rnw:299-303
 ###################################################
 dim(A1)
 dim(B1)
@@ -123,13 +122,13 @@ downsample(A1,B1)
 
 
 ###################################################
-### code chunk number 11: article.Rnw:308-309
+### code chunk number 11: article.Rnw:307-308
 ###################################################
 stplot(Tr, attr = "co2", arrows = TRUE, lwd = 3, by = "IDs",cex.axis=2)
 
 
 ###################################################
-### code chunk number 12: article.Rnw:319-325
+### code chunk number 12: article.Rnw:318-324
 ###################################################
 set.seed(10)
 x <- rTrack();x
@@ -140,7 +139,7 @@ z <- rTrack(bbox = m,transform = T,nrandom = T);z
 
 
 ###################################################
-### code chunk number 13: article.Rnw:329-332
+### code chunk number 13: article.Rnw:328-331
 ###################################################
 par(mfrow=c(2,2),mar=rep(2.2,4))
 plot(x,lwd=2,main="x");plot(y,lwd=2,main="y")
@@ -148,7 +147,7 @@ plot(w,lwd=2,main="w");plot(z,lwd=2,main="z")
 
 
 ###################################################
-### code chunk number 14: article.Rnw:346-349
+### code chunk number 14: article.Rnw:345-348
 ###################################################
 library("forecast")
 data("A3")
@@ -156,7 +155,7 @@ auto.arima.Track(A3)
 
 
 ###################################################
-### code chunk number 15: article.Rnw:382-386
+### code chunk number 15: article.Rnw:381-385
 ###################################################
 ## create Tracks objects
 # tracks1 <- Tracks(list(Beijing[[1]], Beijing[[2]]))
@@ -165,7 +164,7 @@ auto.arima.Track(A3)
 
 
 ###################################################
-### code chunk number 16: article.Rnw:404-412
+### code chunk number 16: article.Rnw:403-411
 ###################################################
  # par(mfrow=c(1,2))
  # meandist <- avedistTrack(Beijing,timestamp = "20 mins")
@@ -178,14 +177,14 @@ auto.arima.Track(A3)
 
 
 ###################################################
-### code chunk number 17: article.Rnw:455-457
+### code chunk number 17: article.Rnw:454-456
 ###################################################
  # b <- Track.idw(Beijing,timestamp = "20 mins",epsilon=1000)
  # plot(b,main="",ribwid=0.04,ribsep=0.02,cex.axis=1.5)
 
 
 ###################################################
-### code chunk number 18: article.Rnw:475-483
+### code chunk number 18: article.Rnw:474-482
 ###################################################
    # q <- avemove(Beijing,timestamp = "20 mins",epsilon=1000)
    # par(mfrow=c(1,2))
@@ -198,7 +197,7 @@ auto.arima.Track(A3)
 
 
 ###################################################
-### code chunk number 19: article.Rnw:533-550
+### code chunk number 19: article.Rnw:532-549
 ###################################################
  # library("spatstat")
  # d <- density(Beijing,timestamp = "20 mins",bw.ppl)
@@ -220,7 +219,7 @@ auto.arima.Track(A3)
 
 
 ###################################################
-### code chunk number 20: article.Rnw:582-604
+### code chunk number 20: article.Rnw:581-603
 ###################################################
  # ch <- chimaps(Beijing,timestamp = "20 mins",rank = 1)
  # chall <- attr(ch,"ims")
@@ -247,7 +246,7 @@ auto.arima.Track(A3)
 
 
 ###################################################
-### code chunk number 21: article.Rnw:662-668
+### code chunk number 21: article.Rnw:661-667
 ###################################################
   # K <- Kinhom.Track(Beijing,correction = "translate",
   #                      timestamp = "20 mins",q=0)

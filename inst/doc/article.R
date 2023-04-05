@@ -147,15 +147,16 @@ plot(w,lwd=2,main="w");plot(z,lwd=2,main="z")
 
 
 ###################################################
-### code chunk number 14: article.Rnw:345-348
+### code chunk number 14: article.Rnw:345-349
 ###################################################
-library("forecast")
-data("A3")
-auto.arima.Track(A3)
+if (require("forecast")) {
+  data("A3")
+  auto.arima.Track(A3)
+}
 
 
 ###################################################
-### code chunk number 15: article.Rnw:381-385
+### code chunk number 15: article.Rnw:382-386
 ###################################################
 ## create Tracks objects
 # tracks1 <- Tracks(list(Beijing[[1]], Beijing[[2]]))
@@ -164,7 +165,7 @@ auto.arima.Track(A3)
 
 
 ###################################################
-### code chunk number 16: article.Rnw:403-411
+### code chunk number 16: article.Rnw:404-412
 ###################################################
  # par(mfrow=c(1,2))
  # meandist <- avedistTrack(Beijing,timestamp = "20 mins")
@@ -177,14 +178,14 @@ auto.arima.Track(A3)
 
 
 ###################################################
-### code chunk number 17: article.Rnw:454-456
+### code chunk number 17: article.Rnw:455-457
 ###################################################
  # b <- Track.idw(Beijing,timestamp = "20 mins",epsilon=1000)
  # plot(b,main="",ribwid=0.04,ribsep=0.02,cex.axis=1.5)
 
 
 ###################################################
-### code chunk number 18: article.Rnw:474-482
+### code chunk number 18: article.Rnw:475-483
 ###################################################
    # q <- avemove(Beijing,timestamp = "20 mins",epsilon=1000)
    # par(mfrow=c(1,2))
@@ -197,7 +198,7 @@ auto.arima.Track(A3)
 
 
 ###################################################
-### code chunk number 19: article.Rnw:532-549
+### code chunk number 19: article.Rnw:533-550
 ###################################################
  # library("spatstat")
  # d <- density(Beijing,timestamp = "20 mins",bw.ppl)
@@ -219,7 +220,7 @@ auto.arima.Track(A3)
 
 
 ###################################################
-### code chunk number 20: article.Rnw:581-603
+### code chunk number 20: article.Rnw:582-604
 ###################################################
  # ch <- chimaps(Beijing,timestamp = "20 mins",rank = 1)
  # chall <- attr(ch,"ims")
@@ -246,7 +247,7 @@ auto.arima.Track(A3)
 
 
 ###################################################
-### code chunk number 21: article.Rnw:661-667
+### code chunk number 21: article.Rnw:662-668
 ###################################################
   # K <- Kinhom.Track(Beijing,correction = "translate",
   #                      timestamp = "20 mins",q=0)

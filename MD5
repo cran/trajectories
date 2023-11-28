@@ -1,5 +1,5 @@
 5ec68cb25ecf3f142ad3773d384d5cf5 *ChangeLog
-1a6bfba28ab122d9d609e17a39b5bf49 *DESCRIPTION
+1d5da04dcae3bfbe54560f91941e27bb *DESCRIPTION
 463a72f00338b13abf67aac476c070d4 *NAMESPACE
 8664b852712833c47bc95bf25be83252 *R/Class-Tracks.R
 a5bb53ac6d3fd3a262b2b6382372464e *R/Tracks-methods.R
@@ -10,7 +10,7 @@ d8a3fdfcf6abeef3e6983d34cfbb371c *R/generalize.R
 00fc31cfc105e08f1d6a8817f03d54aa *R/rtracks.R
 76b9abd51daacd56d5c35d4294df3fa4 *R/stcube.R
 597df85a6a5d8b1bc7dfb7bdeffbee3b *R/stplot.R
-6d19a333b569117488e9df7cfbee3ebc *build/vignette.rds
+ca932cac4a0d4005e89a2af0d142c336 *build/vignette.rds
 ffead62f8219b8df7d6b926cfc04f020 *data/A3.rda
 95f25da8b5eeb29212012a0cae990715 *data/storms.rda
 5ef7610f6fb1cebfa6f7cc87ce55ed13 *demo/00Index
@@ -21,14 +21,14 @@ d84d186878656094ccd22113bd104aee *demo/enviroCaR.R
 493c865930b25491b12e46bd8d4beff0 *demo/google.R
 7a9c1bc5c228c957cb06442227b19695 *demo/stcube.R
 45f8f3a43b331094c6ccd109470977fa *demo/storms.R
-e4800a755b0c07efe11079a43e5682e8 *inst/doc/article.R
-26d9bd1c1ad6cdfd088cd734ff6d0272 *inst/doc/article.Rnw
-623db411f20f0f2fcd99fee3015a7d69 *inst/doc/article.pdf
+ae6f6c2892280b343d6e21da00aa1dbb *inst/doc/article.R
+77e4a092e2585c3a98bfd88425940bb2 *inst/doc/article.Rnw
+66c1654e37ff7b5e351482f538aeba96 *inst/doc/article.pdf
 9ea75705c426ba7bd1175e766fd467fe *inst/docker/Dockerfile
 d34747951b8f857e9a093797a92637f6 *inst/history-06-09-2015.kml
 37e120eb08da43c9b47aaa370cca6a9e *man/A3.Rd
 a9fb5066886d83c061edd651f888be1e *man/Kinhom.Track.Rd
-b200658acfa584b092d1de1640c2b2c5 *man/Track-class.Rd
+5feb209812b88bca4da25d7ec16e29c3 *man/Track-class.Rd
 ad050df95af6a771bd6fdf5bce2c8e19 *man/Track.idw.Rd
 92df86fc1b09550682e410929c4f2eb5 *man/as.Track.Rd
 7c601fc0432c7c60f65c42e1fb9758a3 *man/as.Track.arrow.Rd
@@ -71,7 +71,7 @@ e6ef12da4c7a697c864dfc4cb5e70b2c *man/stbox.Rd
 7c868b787c2133c99d9e54c47f42e8fd *man/tsqTracks.Rd
 09693ae4def76ded09f62d176122f25c *man/unique.Track.Rd
 6e4ce8b95a1b753b1eacc4601ed4a82e *tests/tracks.R
-e30dd54b5345a3cc70e8c32e908fbe5c *tests/tracks.Rout.save
+572e4d8e6038c25f231dff7adf247f4c *tests/tracks.Rout.save
 26baa3e5fc7010aa09d1cfb7199a5cc5 *vignettes/Beijingmap.jpg
 9b5257a9064a82e66f70ffc19006468b *vignettes/Intensity.pdf
 9916a6e68a9030007c4ac0731c34f872 *vignettes/Intensitycenter.pdf
@@ -85,7 +85,7 @@ e30dd54b5345a3cc70e8c32e908fbe5c *tests/tracks.Rout.save
 0c92184ef4eac10cae3a3f57b73c6b4b *vignettes/article-019.pdf
 44e11893d4d841989e2c1172daabb5fe *vignettes/article-020.pdf
 e97e91ddd1120dd24f79ca148f858ae1 *vignettes/article-021.pdf
-26d9bd1c1ad6cdfd088cd734ff6d0272 *vignettes/article.Rnw
+77e4a092e2585c3a98bfd88425940bb2 *vignettes/article.Rnw
 3f2ea1187d95949b61e8da5c2b607142 *vignettes/avemove.pdf
 c390fe5f1239fe002555cdc3e6765fa4 *vignettes/avemove3rd.pdf
 be5a13a7a5be5812ed33f285c58616b2 *vignettes/averagedistance.pdf

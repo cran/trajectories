@@ -7,10 +7,10 @@ options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
 
 
 ###################################################
-### code chunk number 2: article.Rnw:107-109
+### code chunk number 2: article.Rnw:107-109 (eval = FALSE)
 ###################################################
- # install.packages("taxidata", 
- #  repos = "http://pebesma.staff.ifgi.de",type = "source") 
+## install.packages("taxidata", 
+##   repos = "https://cran.uni-muenster.de/pebesma", type = "source") 
 
 
 ###################################################
